@@ -1,0 +1,101 @@
+# In this SQL project, I'm designing a database for my own fictional music store. 
+
+# The store is called 'MHD's Jazz Shop' and it contains 21 items: 7 instruments per brand (or make).
+/** MHD's Jazz Shop
+Monette Trumpet
+Bach Trumpet
+Yamaha Trumpet
+
+Monette Trombone
+Bach Trombone
+Yamaha Trombone
+
+Monette Alto Saxophone
+Bach Alto Saxophone
+Yamaha Alto Saxophone
+
+Monette Tenor Saxophone
+Bach Tenor Saxophone
+Yamaha Tenor Saxophone
+
+Monette Baritone Saxophone
+Bach Baritone Saxophone
+Yamaha Baritone Saxophone
+
+Monette Drum Kit
+Bach Drum Kit
+Yamaha Drum Kit
+
+Monette Piano Keyboard
+Bach Piano Keyboard
+Yamaha Piano Keyboard
+**/
+
+# The column names for the database are outlined below.
+/** Columns:
+ID
+Item
+Price
+Quantity
+Make (Yamaha, Bach, or Monette)
+Condition (New or Used)
+**/
+
+#1. Create a table called 'MHD_Jazz_Shop' that has columns for the ID, item, price, quantity, make, and condition for each instrument.
+CREATE TABLE MHD_Jazz_Shop (id INTEGER PRIMARY KEY, item TEXT, price INTEGER, quantity INTEGER, make TEXT, condition TEXT);
+
+#2. Insert the data for Monette, Bach, and Yamaha trumpets into the table. 
+#   Note that there are 5 instruments in stock for each brand and that only Yamaha instruments are being sold in used condition. This is the same for all instruments throughout the project.
+INSERT INTO MHD_Jazz_Shop VALUES (1, "monette trumpet", 100, 5, "monette", "new");
+INSERT INTO MHD_Jazz_Shop VALUES (2, "bach trumpet", 110, 5, "bach", "new");
+INSERT INTO MHD_Jazz_Shop VALUES (3, "yamaha trumpet", 120, 5, "yamaha", "used");
+
+#3. Insert the data for Monette, Bach, and Yamaha trombones into the table.
+INSERT INTO MHD_Jazz_Shop VALUES (4, "monette trombone", 130, 5, "monette", "new");
+INSERT INTO MHD_Jazz_Shop VALUES (5, "bach trombone", 140, 5, "bach", "new");
+INSERT INTO MHD_Jazz_Shop VALUES (6, "yamaha trombone", 150, 5, "yamaha", "used");
+
+#4. Insert the data for Monette, Bach, and Yamaha alto saxophones into the table.
+INSERT INTO MHD_Jazz_Shop VALUES (7, "monette alto saxophone", 200, 5, "monette", "new");
+INSERT INTO MHD_Jazz_Shop VALUES (8, "bach alto saxophone", 210, 5, "bach", "new");
+INSERT INTO MHD_Jazz_Shop VALUES (9, "yamaha alto saxophone", 220, 5, "yamaha", "used");
+
+#5. Insert the data for Monette, Bach, and Yamaha tenor saxophones into the table.
+INSERT INTO MHD_Jazz_Shop VALUES (10, "monette tenor saxophone", 300, 5, "monette", "new");
+INSERT INTO MHD_Jazz_Shop VALUES (11, "bach tenor saxophone", 310, 5, "bach", "new");
+INSERT INTO MHD_Jazz_Shop VALUES (12, "yamaha tenor saxophone", 320, 5, "yamaha", "used");
+
+#6. Insert the data for Monette, Bach, and Yamaha baritone saxophones into the table.
+INSERT INTO MHD_Jazz_Shop VALUES (13, "monette baritone saxophone", 400, 5, "monette", "new");
+INSERT INTO MHD_Jazz_Shop VALUES (14, "bach baritone saxophone", 410, 5, "bach", "new");
+INSERT INTO MHD_Jazz_Shop VALUES (15, "yamaha baritone saxophone", 420, 5, "yamaha", "used");
+
+#7. Insert the data for Monette, Bach, and Yamaha drum kits into the table.
+INSERT INTO MHD_Jazz_Shop VALUES (16, "monette drum kit", 500, 5, "monette", "new");
+INSERT INTO MHD_Jazz_Shop VALUES (17, "bach drum kit", 510, 5, "bach", "new");
+INSERT INTO MHD_Jazz_Shop VALUES (18, "yamaha drum kit", 520, 5, "yamaha", "used");
+
+#8. Insert the data for Monette, Bach, and Yamaha piano keyboards into the table.
+INSERT INTO MHD_Jazz_Shop VALUES (19, "monette piano keyboard", 600, 5, "monette", "new");
+INSERT INTO MHD_Jazz_Shop VALUES (20, "bach piano keyboard", 610, 5, "bach", "new");
+INSERT INTO MHD_Jazz_Shop VALUES (21, "yamaha piano keyboard", 620, 5, "yamaha", "used");
+
+#8. Show the entire table for the database.
+SELECT * FROM MHD_Jazz_Shop;
+
+#9. Show all the items that are greater than or equal to $400 and order them by price (ascending order).
+SELECT * FROM MHD_Jazz_Shop WHERE price >=400 ORDER BY price;
+
+#10. Show all the items that were made by Bach.
+SELECT * FROM MHD_Jazz_Shop WHERE make = "bach";
+
+#11. Calculate the sum of all the prices in the music store.
+SELECT SUM(price) FROM MHD_Jazz_Shop; 
+
+#11. Select the most expensive item in the music store.
+SELECT MAX(price), item FROM MHD_Jazz_Shop;
+
+#12. Calculate the sum of prices by make for the instruments.
+SELECT SUM(price), make FROM MHD_Jazz_Shop GROUP BY make
+
+
