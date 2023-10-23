@@ -1,3 +1,5 @@
+# This project leveraged the following Fortune 500 dataset:
+
 CREATE TABLE fortune_companies (
     company_id INTEGER PRIMARY KEY,
     company_name TEXT,
@@ -56,43 +58,41 @@ VALUES
     ('Company JJ', 'Manufacturing', 370.0, 3100, 1, 20, 12, 7.6),
     ('Company KK', 'Healthcare', 150.2, 3400, 0, 16, 8, 5.3);
 
-
-
-
+# Select the entire data table to gain a holistic understanding of the information within it.
 SELECT * 
 FROM fortune_companies;
 
-"How many companies are in this list?"
+# How many companies are in this table?
 SELECT COUNT(company_id)
 FROM fortune_companies;
 
-"Which industries are represented in this Fortune 500 list?"
+# Which industries are represented in this table?"
 SELECT industry
 FROM fortune_companies
 GROUP BY industry;
 
-"How many companies are represented in each industry?"
+# How many companies are represented in each industry?
 SELECT industry, COUNT(company_id) AS total_companies
 FROM fortune_companies
 GROUP BY industry;
 
-"Companies ordered by average tenure for employees."
+# Companies ordered by average tenure (in years) for employees.
 SELECT avg_employee_tenure, company_name
 FROM fortune_companies
 ORDER BY avg_employee_tenure desc;
 
-"Which company has the lowest average tenure in years? Which company has the highest?"
+# Which company has the lowest average tenure? Which company has the highest?"
 SELECT MIN(avg_employee_tenure), company_name
 FROM fortune_companies;
 
 SELECT MAX(avg_employee_tenure), company_name
 FROM fortune_companies;
 
-"What is the total number of Fortune 500 professionals in this list?"
+# What is the total number of Fortune 500 professionals in this table?
 SELECT SUM(employees)
 FROM fortune_companies;
 
-"How many employees work at each company? How many per industry?"
+# How many employees work at each company? How many per industry?
 SELECT employees, company_name
 FROM fortune_companies
 ORDER BY employees desc;
@@ -101,16 +101,16 @@ SELECT SUM(employees), industry
 FROM fortune_companies
 GROUP BY industry;
 
-"What is the average revenue of healthcare companies?"
+# What is the average revenue of healthcare companies?
 SELECT ROUND(AVG(revenue), 2) AS avg_revenue, industry
 FROM fortune_companies
 WHERE industry = "Healthcare";
 
-"What is the total amount of money made by companies in this list rounded to the nearest integer?"
+# What is the total amount of money made by companies in this list rounded to the nearest integer?
 SELECT ROUND(SUM(revenue))
 FROM fortune_companies;
 
-"Select all companies and group them by buckets of revenue. Which ones are in the medium bucket?"
+# Select all companies and group them by buckets of revenue. Which ones are in the medium bucket?
 SELECT COUNT(*) AS total_companies,
 CASE WHEN employees <= 2000 THEN "Small Firms"
 WHEN employees <= 4000 THEN "Medium Firms"
@@ -119,14 +119,20 @@ ELSE "null" END AS firm_size
 FROM fortune_companies
 GROUP BY firm_size;
 
-"Which companies have at least 10 days of PTO and healtchare benefits?"
+# Which companies have at least 10 days of PTO and healthcare benefits?
 SELECT company_name, paid_time_off_days, healthcare_benefits
 FROM fortune_companies
 WHERE paid_time_off_days >= 10
 AND healthcare_benefits = 1;
 
-"Which companies have at least 12 weeks of maternity leave or 20 dayts of PTO?"
+# Which companies have at least 12 weeks of maternity leave or 20 days of PTO?
 SELECT company_name, paid_time_off_days, maternity_leave_weeks
 FROM fortune_companies
 WHERE paid_time_off_days >= 20
 OR maternity_leave_weeks >= 12;
+
+# On average, which industries provide at least 12 weeks of maternity leave?
+SELECT industry, AVG(maternity_leave_weeks) AS avg_maternity_leave
+FROM fortune_companies
+GROUP BY industry
+HAVING avg_maternity_leave >= 12;
