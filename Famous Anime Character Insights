@@ -1,0 +1,102 @@
+# This project contains tables with a few characters from popular Japanese anime TV shows. 
+# Relational queries were used to analyze information about characters' online order histories, friendships, powers/abilities, and movie specials.
+
+# This is a table of characters from popular Japanese anime TV shows. 
+CREATE TABLE anime_characters (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, anime TEXT);
+
+INSERT INTO anime_characters (name, anime) VALUES ("Goku", "Dragon Ball");
+INSERT INTO anime_characters (name, anime) VALUES ("Vegeta", "Dragon Ball");
+INSERT INTO anime_characters (name, anime) VALUES ("Piccolo", "Dragon Ball");
+INSERT INTO anime_characters (name, anime) VALUES ("Ichigo", "Bleach");
+INSERT INTO anime_characters (name, anime) VALUES ("Tanjiro", "Demon Slayer");
+INSERT INTO anime_characters (name, anime) VALUES ("Zenitsu", "Demon_Slayer");
+INSERT INTO anime_characters (name, anime) VALUES ("Eren", "Attack on Titan");
+INSERT INTO anime_characters (name, anime) VALUES ("Yuji", "Jujutsu Kaisen");
+
+
+# Display the table of anime characters.
+SELECT * FROM anime_characters;
+
+
+Make a table of special powers/abilities for these anime characters, then match each character to their respective power/ability.
+CREATE TABLE anime_powers (character_id INTEGER, name TEXT);
+
+INSERT INTO anime_powers (character_id, name) VALUES (1, "kamehameha");
+INSERT INTO anime_powers (character_id, name) VALUES (8, "black flash");
+INSERT INTO anime_powers (character_id, name) VALUES (2, "final flash");
+INSERT INTO anime_powers (character_id, name) VALUES (3, "special beam cannon");
+INSERT INTO anime_powers (character_id, name) VALUES (7, "attack titan");
+INSERT INTO anime_powers (character_id, name) VALUES (4, "getsuga tensho");
+INSERT INTO anime_powers (character_id, name) VALUES (6, "thunder breathing");
+INSERT INTO anime_powers (character_id, name) VALUES (5, "sun breathing");
+
+# Display the table of powers/abilities. 
+SELECT * FROM anime_powers;
+
+
+# To whom do these powers belong? Match each anime character with the power they possess in their TV show. 
+SELECT anime_characters.name, anime_powers.name AS power FROM anime_characters
+    JOIN anime_powers
+    ON id = character_id;
+    
+    
+# Make a table that contains the customer information for a few of the anime characters. 
+CREATE TABLE anime_customers (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT);
+
+INSERT INTO anime_customers (name, email) VALUES ("Goku", "goku@dbz.com");
+INSERT INTO anime_customers (name, email) VALUES ("Zenitsu", "zenitsu@ds.com");
+INSERT INTO anime_customers (name, email) VALUES ("Ichigo", "ichigo@bleach.com");
+
+# Make a data table that contains the unique ID, item purchased, and the item price for characters in the previous table.
+CREATE TABLE anime_orders (id INTEGER PRIMARY KEY AUTOINCREMENT, customer_id INTEGER, item TEXT, price REAL);
+
+INSERT INTO anime_orders (customer_id, item, price) VALUES (1, "blue gi", 250.00);
+INSERT INTO anime_orders (customer_id, item, price) VALUES (2, "katana", 2000.00);
+INSERT INTO anime_orders (customer_id, item, price) VALUES (3, "quincy crest", 1000.00);
+INSERT INTO anime_orders (customer_id, item, price) VALUES (1, "potara earings", 500.00);
+
+# Which items were ordered by the characters? Create a table that displays the customers' information and details about their orders. 
+SELECT anime_customers.name, anime_customers.email, anime_orders.item, anime_orders.price FROM anime_customers
+    LEFT JOIN anime_orders
+    ON anime_customers.id = anime_orders.customer_id;
+
+# What was the total amount of money spent by each character?
+SELECT anime_customers.name, anime_customers.email, SUM(anime_orders.price) AS total_spent
+FROM anime_customers
+    LEFT JOIN anime_orders
+    ON anime_customers.id = anime_orders.customer_id
+    GROUP BY anime_customers.name
+    ORDER BY total_spent DESC;
+
+# Let's pretend that these characters knew each other and formed friendships. Make a friendbook for these anime heroes using the original table, 'anime_characters'.
+
+# Create a table that houses the ID's for friendships. 
+CREATE TABLE anime_friends (id INTEGER PRIMARY KEY AUTOINCREMENT, person1_id INTEGER, person2_id INTEGER);
+
+INSERT INTO anime_friends (person1_id, person2_id) VALUES (1, 8);
+INSERT INTO anime_friends (person1_id, person2_id) VALUES (2, 7);
+INSERT INTO anime_friends (person1_id, person2_id) VALUES (3, 5);
+
+# Display the anime friendships using the JOIN function.
+SELECT a.name, b.name FROM anime_friends
+    JOIN anime_characters a
+    ON anime_friends.person1_id = a.id
+    JOIN anime_characters b
+    ON anime_friends.person2_id = b.id;
+
+# Now, make a table movies in the Broly Trilogy from Dragon Ball Z.
+CREATE TABLE dbz_movies (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, released INTEGER, sequel_id INTEGER);
+
+
+INSERT INTO dbz_movies (title, released, sequel_id) 
+    VALUES ("Dragon Ball Z: Broly - The Legendary Super Saiyan", 1993, 1);
+INSERT INTO dbz_movies (title, released, sequel_id) 
+    VALUES ("Dragon Ball Z: Broly - Second Coming", 1994, 2);
+INSERT INTO dbz_movies (title, released, sequel_id)
+    VALUES ("Dragon Ball Z: Bio-Broly", 1994, NULL);
+
+# Display the movies in order without the ID and sequel ID numbers. 
+SELECT dbz_movies.title, dbz_movies.released FROM dbz_movies
+    LEFT OUTER JOIN dbz_movies sequels
+    ON dbz_movies.sequel_id = sequels.id;
+
