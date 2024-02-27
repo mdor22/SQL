@@ -9,7 +9,7 @@ INSERT INTO anime_characters (name, anime) VALUES ("Vegeta", "Dragon Ball");
 INSERT INTO anime_characters (name, anime) VALUES ("Piccolo", "Dragon Ball");
 INSERT INTO anime_characters (name, anime) VALUES ("Ichigo", "Bleach");
 INSERT INTO anime_characters (name, anime) VALUES ("Tanjiro", "Demon Slayer");
-INSERT INTO anime_characters (name, anime) VALUES ("Zenitsu", "Demon_Slayer");
+INSERT INTO anime_characters (name, anime) VALUES ("Zenitsu", "Demon Slayer");
 INSERT INTO anime_characters (name, anime) VALUES ("Eren", "Attack on Titan");
 INSERT INTO anime_characters (name, anime) VALUES ("Yuji", "Jujutsu Kaisen");
 
