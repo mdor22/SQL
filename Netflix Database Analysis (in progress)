@@ -1,4 +1,6 @@
--- This project used the following dataset: 
+# This project reveals insights about TV and movie content on Netflix: 
+
+# The project was written using the PostgreSQL dialect and leveraged data from the two Netflix datasets shown below:
 
 CREATE TABLE netflix_titles_info
     ("show_id" varchar(5), "type" varchar(7), "title" varchar(58), "country" varchar(74), "date_added" timestamp, "release_year" int, "rating" varchar(5), "duration" varchar(9), "listed_in" varchar(74))
@@ -59,60 +61,73 @@ VALUES
     ;
     
 
--- Try to figure out which attribute you'd use to join the two Netflix tables. How can you see what attributes (aka columns) there are in each table to find out what they have in common?
+# Which attribute can we use to join the two Netflix tables. How can you see what attributes (aka columns) there are in each table to find out what they have in common?
 
---- I'm going to select the 5 records from each table using the limit function to briefly scope the columns to get a better sense of the data
+## I'm going to select 5 records from each table using the limit function to briefly scope the columns and get a better sense of the data.
 
 select * from "netflix_people" limit 5;
 
 select * from "netflix_titles_info" limit 5;
 
---- Answer: By looking at the data, I noticed that both tables have this field: 'show_id'. We can use a left join on 'show_id' to join "netflix_people" and "netflix_titles_info"
+## By looking at the data, I noticed that both tables have this field: 'show_id'. We can use a left join on 'show_id' to join "netflix_people" and "netflix_titles_info"
 
--- Using the PostgreSQL dialect, write a join to select a few columns from both tables at the same time.
+# Using the PostgreSQL dialect, how can we write a join to select a few columns from both tables at the same time?
 
---- I'm going to select 2 unique columns from each table, in addition to the field shared between both tables, using a left join on show_id. If we only wanted to see records shared between both tables rather than all of the info in our left table, we would use an inner join.
+## I'm going to select 2 unique columns from each table, in addition to the field shared between both tables, using a left join on show_id. If we only wanted to see records shared between both tables rather than all of the info in our left table, we would use an inner join.
 
 select
-	nti.title,
+	nti.title, -- indented the fields to make the code more legible
 	np.director,
-    	np.cast,
- 	nti.release_year
+	np.cast,
+	nti.release_year
 from "netflix_titles_info" nti --aliased as nti, an abbreviation for the table name
 left join "netflix_people" np --aliased as np, an abbreviation for the table name
 on nti.show_id = np.show_id;
 
 
--- The following SQL code answers various questions about the content from Netflix:
+# The following SQL code answers various questions about the content from Netflix:
 
--- 1. How many movie titles are there in the database? (movies only, not tv shows)
---- I'm going to count all records and filter for movies using the 'type' field from the titles table.
+# 1. How many movie titles are there in the database? (movies only, not tv shows)
+## I'm going to count all records and filter for movies using the 'type' field from the titles table.
 
 select count(*)
 from "netflix_titles_info" -- must use double quotes for table names in PostgreSQL
 where type = 'Movie' -- must use single quotes for PostgreSQL syntax
 
--- 2. When was the most recent batch of tv shows and/or movies added to the database?
---- I can determine the most recent tv shows/movies using the 'date_added' field from the titles table.
+# 2. When was the most recent batch of tv shows and/or movies added to the database?
+## I can determine the most recent tv shows/movies using the 'date_added' field from the titles table.
 
 select * from "netflix_titles_info"; -- used to scan different timestamps in our table under 'date_added'
 
 select max(date(date_added)) -- max function gives us the most recent record when added to the date function
 from "netflix_titles_info";
 
--- 3. List all the movies and tv shows in alphabetical order.
+# 3. List all the movies and tv shows in alphabetical order.
+
 select
 	title, 
-    type, 
-    release_year -- added media type and release year to produce a more complete table
+	type, 
+	release_year -- added media type and release year to produce a more complete table
 from "netflix_titles_info"
 order by title; -- order by function specifies ascending order by default, so it'll be A-Z
 
--- 4. Who was the Director for the movie The Starling?
---- To answer this question, we're going to need to join the people and titles together to access the fields we need. I'm going to use a left join on 'show_id' to link both tables.
+# 4. Who was the Director for the movie The Starling?
+## To answer this question, we're going to need to join the people and titles together to access the fields we need. I'm going to use a left join on 'show_id' to link both tables.
 
 select 
 	np.director, 
-    nti.title -- not necessary but specified which tables each field is from for clarity
+	nti.title -- not necessary but specified which tables each field is from for clarity
 from "netflix_titles_info" nti
 left join "netflix_people" np
+
+# 5. What is the oldest movie in the database and what year was it made?
+## We'll need to order the movies by their release year and limit the results to 1. That will show us the oldest movie (i.e. Sankofa, 1993). 
+## If we had multiple movies released in 1993, we probably would have needed a subquery to find the oldest one among them. Thankfully, there was only one movie released that year in our dataset.
+
+select 
+	title, 
+	release_year
+from "netflix_titles_info"
+where type = 'Movie'
+order by release_year
+limit 1;
