@@ -73,13 +73,20 @@ select * from "netflix_titles_info" limit 5;
 
 --- I'm going to select 2 unique columns from each table, in addition to the field shared between both tables, using a left join on show_id. If we only wanted to see records shared between both tables rather than all of the info in our left table, we would use an inner join.
 
-select 
-
+select
 	nti.title,
-    np.director,
-    np.cast,
+	np.director,
+    	np.cast,
  	nti.release_year
 from "netflix_titles_info" nti --aliased as nti, an abbreviation for the table name
 left join "netflix_people" np --aliased as np, an abbreviation for the table name
 on nti.show_id = np.show_id;
 
+
+-- Project Questions:
+-- 1. How many movie titles are there in the database? (movies only, not tv shows)
+-- I'm going to do a count of all records classified as movies using the 'type' field from the titles table.
+
+select count(*)
+from "netflix_titles_info" -- must use double quotes for table names in PostgreSQL
+where type = 'Movie' -- must use single quotes for PostgreSQL syntax
