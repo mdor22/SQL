@@ -83,10 +83,20 @@ left join "netflix_people" np --aliased as np, an abbreviation for the table nam
 on nti.show_id = np.show_id;
 
 
--- Project Questions:
+-- The following SQL code answers various questions about the content from Netflix:
+
 -- 1. How many movie titles are there in the database? (movies only, not tv shows)
--- I'm going to do a count of all records classified as movies using the 'type' field from the titles table.
+--- I'm going to count all records and filter for movies using the 'type' field from the titles table.
 
 select count(*)
 from "netflix_titles_info" -- must use double quotes for table names in PostgreSQL
 where type = 'Movie' -- must use single quotes for PostgreSQL syntax
+
+
+-- 2. When was the most recent batch of tv shows and/or movies added to the database?
+--- I can determine the most recent tv shows/movies using the 'date_added' field from the titles table.
+
+select * from "netflix_titles_info"; -- used to scan different timestamps in our table under 'date_added'
+
+select max(date(date_added)) -- max function gives us the most recent record when added to the date function
+from "netflix_titles_info";
