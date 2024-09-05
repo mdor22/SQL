@@ -107,3 +107,12 @@ select
     release_year -- added media type and release year to produce a more complete table
 from "netflix_titles_info"
 order by title; -- order by function specifies ascending order by default, so it'll be A-Z
+
+-- 4. Who was the Director for the movie The Starling?
+--- To answer this question, we're going to need to join the people and titles together to access the fields we need. I'm going to use a left join on 'show_id' to link both tables.
+
+select 
+	np.director, 
+    nti.title -- not necessary but specified which tables each field is from for clarity
+from "netflix_titles_info" nti
+left join "netflix_people" np
