@@ -92,7 +92,7 @@ on nti.show_id = np.show_id;
 
 select count(*)
 from "netflix_titles_info" -- must use double quotes for table names in PostgreSQL
-where type = 'Movie' -- must use single quotes for PostgreSQL syntax
+where type = 'Movie'; -- must use single quotes for PostgreSQL syntax
 
 # 2. When was the most recent batch of tv shows and/or movies added to the database?
 ## I can determine the most recent tv shows/movies using the 'date_added' field from the titles table.
@@ -119,6 +119,8 @@ select
 	nti.title -- not necessary but specified which tables each field is from for clarity
 from "netflix_titles_info" nti
 left join "netflix_people" np
+on nti.show_id = np.show_id
+where nti.title = 'The Starling';
 
 # 5. What is the oldest movie in the database and what year was it made?
 ## We'll need to order the movies by their release year and limit the results to 1. That will show us the oldest movie (i.e. Sankofa, 1993). 
