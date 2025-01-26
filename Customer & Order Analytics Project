@@ -1,0 +1,154 @@
+# In this SQL file, I'm querying a database with tables containing customer and order data to quantify relevant statistics.
+
+
+#1. How many many unique orders were placed in January? In other words, how many distinct order ids do we have? 9,268 unique order ID's
+
+## Skim the columns in this table.
+select * 
+from BIT_DB.JanSales
+limit 10;
+
+## Are there null values for order ID's?
+select orderID
+from BIT_DB.JanSales;
+
+select count(distinct orderID) 
+from BIT_DB.JanSales
+where orderID != 'Order ID'
+    and length(orderID) = 6
+;        
+
+
+#2. How many of those orders were for an iPhone? 379 iPhone orders.
+
+## What are iPhone records called in the Product column?
+select distinct Product
+from BIT_DB.JanSales;
+
+select count(distinct orderID) 
+from BIT_DB.JanSales
+where orderID != 'Order ID'
+    and length(orderID) = 6
+    and Product = 'iPhone'
+;        
+
+
+#3. Select the customer account numbers for all the orders that were placed in February. 
+
+## Skim the columns in the customers table.
+select * 
+from BIT_DB.customers
+limit 10;
+
+## Skim the columns in the table containing February sales data.
+select * 
+from BIT_DB.FebSales
+limit 10;
+
+## Can I find same order ID between tables?
+select * 
+from BIT_DB.customers customers
+left join BIT_DB.FebSales febsales
+on customers.order_id = febsales.orderID
+where customers.order_id = '150507'
+;
+
+select orderdate
+from BIT_DB.FebSales;
+
+
+select 
+    distinct customers.acctnum, 
+    febsales.orderdate
+from BIT_DB.customers customers
+inner join BIT_DB.FebSales febsales
+on customers.order_id = febsales.orderID
+where febsales.orderdate is not null
+    and febsales.orderdate != 'Order Date'
+    and orderID != 'Order ID'
+    and length(orderID) = 6
+;
+
+
+#4. Which product was the cheapest one sold in January, and what was the price?
+
+## Sort the unique products by price
+select 
+    distinct Product,
+    price
+from BIT_DB.JanSales
+where orderID != 'Order ID'
+    and length(orderID) = 6 
+order by price desc                
+;
+
+
+## Select the Triple-A batteries since they're the cheapest
+select 
+    distinct Product,
+    price
+from BIT_DB.JanSales
+where orderID != 'Order ID'
+    and length(orderID) = 6 
+order by price asc
+limit 1                
+;
+
+
+#5. What is the total revenue for each product sold in January?
+
+## revenue = (# products sold) x (price of products)
+select
+    Product,
+    round(sum(Quantity) * price, 2) as revenue
+from BIT_DB.JanSales
+where orderID != 'Order ID'
+    and length(orderID) = 6
+group by 1
+;
+
+
+#6. Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue?
+
+## We have order ID's listed as 'Order ID' and some blanks in this field.
+select orderID 
+from BIT_DB.FebSales;
+
+
+## How is the address given stored in the table? Pull records for addresses that start with '548'.
+select *
+from BIT_DB.FebSales
+where location like '548%'
+
+select *
+from BIT_DB.FebSales
+limit 10;
+
+
+select
+    Product,
+    sum(Quantity) as amount_sold,
+    round(sum(Quantity) * price, 2) as revenue
+from BIT_DB.FebSales
+where orderID != 'Order ID'
+    and length(orderID) = 6
+    and location = '548 Lincoln St, Seattle, WA 98101'
+group by 1
+;
+
+
+#7. How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers?
+
+select
+    count(distinct cust.acctnum) as cust_count,
+    round(avg(Quantity * price), 2) as avg_spent
+from BIT_DB.FebSales feb
+left join BIT_DB.customers cust
+
+
+
+on cust.order_id = feb.orderID
+where feb.orderID != 'Order ID'
+    and length(feb.orderID) = 6
+    and Quantity > 2
+;
